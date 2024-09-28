@@ -12,3 +12,6 @@ def home(request):
     return render(request, 'webcrawler/home.html') # se refere a pasta web
 # dentro de templates, o django ja reconhece os templates
 
+# a principio na views vai ter as requisições, pode mudar esse home a vontade
+# o principal aqui é cuidar das requisições que o webcrawler terá que
+# pegar 
