@@ -5,4 +5,5 @@ from web.views import home
 
 urlpatterns = [
     path('', home),
+    
 ]
