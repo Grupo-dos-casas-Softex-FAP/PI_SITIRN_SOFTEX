@@ -1,0 +1,45 @@
+{% extends "static/base.html" %}
+
+{% block 'content' %}
+    <h1 class="centraliza"> Imoveis</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for objeto in page_obj %}
+                <tr>
+                    <td>{{ objeto.imovel_codigo }}</td>
+                    <td>{{ objeto.imovel_tipo }}</td>
+                    <td>{{ objeto.imovel_valor }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Navegação de Página -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">Primeira</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <strong>{{ num }}</strong>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Última</a>
+        {% endif %}
+    </div>
+
+{% endblock 'content' %}

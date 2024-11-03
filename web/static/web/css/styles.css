@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.sidebar {
+    width: 200px;
+    background-color: #f0f0f0;
+    height: 100vh;
+    padding: 20px;
+}
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+.sidebar li {
+    margin-bottom: 10px;
+}
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+}
+.action-buttons {
+    margin-bottom: 20px;
+}
+.action-buttons button {
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.dashboard-item {
+    background-color: #e9e9e9;
+    padding: 20px;
+    border-radius: 5px;
+}
+#property-filter {
+    margin-bottom: 20px;
+}
+#property-filter input, #property-filter select {
+    margin-right: 10px;
+    padding: 5px;
+}
+#chart-container {
+    width: 100%;
+    height: 300px;
+    background-color: #f0f0f0;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+th {
+    background-color: #f2f2f2;
+}
+.pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+.pagination strong {
+    margin: 0 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.centraliza {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}

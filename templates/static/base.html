@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITI-Natal Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'web/css/styles.css' %}">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>SITI-Natal</h2>
+        <ul>
+            <li><a href="{% url "dashboard" %}">Dashboard</a></li>
+            <li><a href="{% url "vizualizacao" %}">Visualização de Dados</a></li>
+            <li><a href="{% url "relatorio" %}">Relatórios</a></li>
+            <li><a href="{% url "configuracao" %}">Configurações</a></li>
+        </ul>
+    </div>
+    {% block 'content' %}
+    
+    {% endblock 'content' %}
+</body>
+</html>

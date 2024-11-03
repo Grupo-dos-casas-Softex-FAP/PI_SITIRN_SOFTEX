@@ -57,7 +57,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "base_templates_web"
+            BASE_DIR / "templates"
             ], #caso tenhamos outros templates fora da pasta "templates"
         # será necessário adicionar aqui usarei uma pasta base_templates
         # apenas lê o conteudo dentro da pasta
@@ -121,13 +121,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+import os
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'base_static_web'
-]
+STATIC_URL = "/static/"
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "templates/static"),)
+STATIC_ROOT = os.path.join("static")
 
-STATIC_ROOT= BASE_DIR / 'static'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
