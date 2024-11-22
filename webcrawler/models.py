@@ -11,6 +11,7 @@ class Imovel(models.Model):
     # imovel_rua = models.CharField(max_length=100)
     # imovel_bairro = models.CharField(max_length=100)
     # imovel_cidade = models.CharField(max_length=100)
+    # imovel_site = models.CharField(max_length=100)
     imovel_valor = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
