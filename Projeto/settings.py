@@ -81,11 +81,16 @@ WSGI_APPLICATION = "Projeto.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',                          # Nome do banco
+        'USER': 'postgres.oppjuidssocvfzvhfvef',     # Usuário
+        'PASSWORD': 'dVbOI7war1r3zrDC',             # Senha
+        'HOST': 'aws-0-sa-east-1.pooler.supabase.com',  # Endereço do host
+        'PORT': '6543',                             # Porta
     }
 }
+
 
 
 # Password validation
@@ -135,3 +140,9 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ],
+# }
