@@ -107,7 +107,8 @@ class Command(BaseCommand):
                 defaults={
                     'imovel_tipo': dados['titulo'],
                     'imovel_endereco': dados['endereco'],
-                    'imovel_valor': dados['preco']
+                    'imovel_valor': dados['preco'],
+                    'imovel_site': 'Abreu',
                 }
             )
             codigos_processados.add(codigo)  # Adicione o código processado à lista
