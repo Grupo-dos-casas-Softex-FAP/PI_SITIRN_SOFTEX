@@ -6,6 +6,20 @@ from selenium.webdriver.common.by import By
 from django.core.management.base import BaseCommand
 from webcrawler.models import Imovel  # Importa o modelo do Django
 
+def tratar_tipo(tipo):
+    tipo = tipo.lower()
+    if "casa" in tipo:
+        return "casa"
+    elif "apartamento" in tipo:
+        return "apartamento"
+    elif "terreno" in tipo:
+        return "terreno"
+    elif "comercial" in tipo or "ponto comercial" in tipo:
+        return "comercial"
+    else:
+        return "outro"
+
+
 def tratar_preco(preco_str):
     # Remove "R$", pontos e substitui vírgula por ponto
     if preco_str:
@@ -27,7 +41,7 @@ class Command(BaseCommand):
     # só colocar dentro
     def handle(self, *args, **kwargs):
         # Configuração e inicialização do driver do Selenium
-        driver = webdriver.Firefox()
+        driver = webdriver.Chrome()
         url = "https://abreuimoveis.com.br/venda/residencial_comercial/natal/"
         driver.get(url)
 
@@ -51,7 +65,7 @@ class Command(BaseCommand):
 
             for imovel in imoveis:
                 titulo = imovel.find('h2', class_='titulo-grid').text.strip()
-                tipo = imovel.find('span', class_='thumb-status').text.strip() if imovel.find('span', class_='thumb-status') else 'Tipo não informado'
+                tipo = imovel.find('h2', class_='titulo-grid').text.strip()
                 preco = imovel.find('span', class_='thumb-price').text.strip() if imovel.find('span', class_='thumb-price') else 'Preço não informado'
                 condominio = imovel.find('span', class_='item-price-condominio').text.strip() if imovel.find('span', class_='item-price-condominio') else 'Condomínio não informado'
                 iptu = imovel.find('span', class_='item-price-iptu').text.strip() if imovel.find('span', class_='item-price-iptu') else 'IPTU não informado'
@@ -67,7 +81,7 @@ class Command(BaseCommand):
 
                 dados_imovel = {
                     'titulo': titulo,
-                    'tipo': tipo,
+                    'tipo': tratar_tipo(tipo),
                     'preco': tratar_preco(preco),
                     'caracteristicas': caracteristicas,
                     'condominio': condominio,
@@ -84,12 +98,16 @@ class Command(BaseCommand):
             scroll_height = driver.execute_script("return arguments[0].scrollHeight;", elemento_scroll)
 
         driver.quit()
-
+        # Valide que a raspagem foi bem-sucedida antes de qualquer exclusão/inativação
+        if len(lista_imoveis) == 0:
+            self.stdout.write(self.style.ERROR("Erro na raspagem: Nenhum imóvel foi encontrado."))
+            return
+        
         # Obtenha os códigos dos imóveis existentes no banco de dados
         codigos_existentes = set(Imovel.objects.values_list('imovel_codigo', flat=True))
 
         # Liste os códigos que foram processados
-        codigos_processados = set()
+        codigos_processados = set(dados['codigo'] for dados in lista_imoveis)
 
         # Salva ou atualiza cada imóvel no banco de dados
         for dados in lista_imoveis:
@@ -105,8 +123,10 @@ class Command(BaseCommand):
                 imovel_codigo=codigo,
                 # esses são os dados que vão ser criados ou atualizados
                 defaults={
-                    'imovel_tipo': dados['titulo'],
+                    'imovel_titulo': dados['titulo'],
+                    'imovel_tipo': dados['tipo'],
                     'imovel_endereco': dados['endereco'],
+                    'imovel_caracteristicas': dados['caracteristicas'],
                     'imovel_valor': dados['preco'],
                     'imovel_site': 'Abreu',
                 }
@@ -120,11 +140,11 @@ class Command(BaseCommand):
         
         # Identifique os códigos que não foram processados
         codigos_nao_encontrados = codigos_existentes - codigos_processados
-        
-        # Exclua imóveis com os códigos não encontrados
+
+        # Em vez de excluir, marque como inativos
         if codigos_nao_encontrados:
-            Imovel.objects.filter(imovel_codigo__in=codigos_nao_encontrados).delete()
+            Imovel.objects.filter(imovel_codigo__in=codigos_nao_encontrados).update(ativo=False)
             for codigo in codigos_nao_encontrados:
-                self.stdout.write(self.style.WARNING(f"Imóvel com código '{codigo}' foi excluído do banco de dados."))
+                self.stdout.write(self.style.WARNING(f"Imóvel com código '{codigo}' marcado como inativo."))
         else:
-            self.stdout.write(self.style.SUCCESS("Nenhum imóvel foi excluído."))
+            self.stdout.write(self.style.SUCCESS("Nenhum imóvel foi marcado como inativo."))
