@@ -1,17 +1,18 @@
 from rest_framework import serializers
-from ..models import Imovel
+from ..models import Imovel_Caio
 
 class ImovelSerializer(serializers.ModelSerializer):
     # criei um metodo
     created_at = serializers.SerializerMethodField()
     class Meta:
-        model = Imovel
+        model = Imovel_Caio
         fields = (
             'id',
+            'imovel_titulo',
             'imovel_tipo',
-            'imovel_codigo',
-            'imovel_endereco',
             'imovel_valor',
+            'imovel_caracteristicas',
+            'imovel_site',
             'created_at',
         )
     # obrigatoriamente devo criar um metodo da classe
